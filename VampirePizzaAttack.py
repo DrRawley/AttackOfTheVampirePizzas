@@ -1,5 +1,5 @@
 #Import Libraries
-#import sys #checked to see what version of python was running where
+import sys
 #print(sys.executable)
 import pygame
 from pygame import *
@@ -85,7 +85,21 @@ while game_running:
     #Exit loop on quit
     if event.type == QUIT:
       game_running = False
-  
+    #Listen for the mouse button to be clicked
+    elif event.type == MOUSEBUTTONDOWN:
+      #Get the x,y coordinates where the mouse was clicked on the screen
+      coordinates = mouse.get_pos()
+      x = coordinates[0]
+      y = coordinates[1]
+      #Find the background tile at the location where the mouse was clicked and
+      #change the value of effect to True
+      tile_y = y // 100
+      tile_x = x // 100
+      tile_grid[tile_y][tile_x].effect = True
+      print('You clicked me! x: ' + str(x) + '  y: ' + str(y))
+      print('This corresponds to tile: row: ' + str(tile_y) + '  col: ' + str(tile_x))
+      sys.stdout.flush() #write debug stuff to console right away
+
   #Spawn Vampire Pizza Sprites
   if randint(1, SPAWN_RATE) == 1:
     VampireSprite(VAMPIRE_PIZZA, all_vampires)
@@ -93,7 +107,8 @@ while game_running:
   for vampire in all_vampires:
     vampire.update(GAME_WINDOW, BACKGROUND)
   #Update display
-  display.update()
+  #display.update()
+  display.flip()
 
   clock.tick(FRAME_RATE)
 
