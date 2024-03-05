@@ -21,6 +21,10 @@ WINDOW_RES = (WINDOW_WIDTH, WINDOW_HEIGHT)
 SPAWN_RATE = 360
 FRAME_RATE = 60
 
+#Define speeds
+REG_SPEED = 2
+SLOW_SPEED = 1
+
 #define tile parameters
 WIDTH = 100
 HEIGHT = 100
@@ -96,19 +100,55 @@ while game_running:
       tile_y = y // 100
       tile_x = x // 100
       tile_grid[tile_y][tile_x].effect = True
-      print('You clicked me! x: ' + str(x) + '  y: ' + str(y))
-      print('This corresponds to tile: row: ' + str(tile_y) + '  col: ' + str(tile_x))
-      sys.stdout.flush() #write debug stuff to console right away
+      # print('You clicked me! x: ' + str(x) + '  y: ' + str(y))
+      # print('This corresponds to tile: row: ' + str(tile_y) + '  col: ' + str(tile_x))
+      # sys.stdout.flush() #write debug stuff to console right away
 
   #Spawn Vampire Pizza Sprites
   if randint(1, SPAWN_RATE) == 1:
-    VampireSprite(VAMPIRE_PIZZA, all_vampires)
+    VampireSprite(VAMPIRE_PIZZA, REG_SPEED, all_vampires)
+
+  #Set up collision detection
+  #Run through each vamp pizza sprite in the list
+  for vampire in all_vampires:
+    #Store the row where the vampire sprite is located
+    tile_row = tile_grid[vampire.rect.y // 100]
+    #Store the current location of the left edge of the vampire sprite
+    vamp_left_side = vampire.rect.x // 100
+    #Store the current location of the right edge
+    vamp_right_side = (vampire.rect.x + vampire.rect.width) // 100
+    #If the vampire sprite is on the grid, find which column it's in
+    if 0 <= vamp_left_side <= 10:
+      left_tile = tile_row[vamp_left_side]
+    #Return no column if the vampire sprite is not on the grid
+    else:
+      left_tile = None
+    #Do the same for the right side
+    if 0 <= vamp_right_side <= 10:
+      right_tile = tile_row[vamp_right_side]
+    else:
+      right_tile = None
+    #Now test if the left side of the vampire pizza is touching a tile and
+    #if that tile has been clicked.
+    #if true, set the vampire speed to 1
+    if bool(left_tile) and left_tile.effect:
+      vampire.speed = SLOW_SPEED
+    #Test if the right side is touching a tile and if that one has been clicked
+    if bool(right_tile) and right_tile.effect:
+      #Make sure both sides are touching a different tile
+      if right_tile != left_tile:
+        #if both are true, change vampire speed to 1
+        vampire.speed = SLOW_SPEED
+    #Delete the sprite if it leaves the screen
+    if vampire.rect.x <= 0:
+      vampire.kill()
+    
+
   #Update sprites
   for vampire in all_vampires:
     vampire.update(GAME_WINDOW, BACKGROUND)
   #Update display
-  #display.update()
-  display.flip()
+  display.update()
 
   clock.tick(FRAME_RATE)
 

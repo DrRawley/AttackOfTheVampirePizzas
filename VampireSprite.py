@@ -5,12 +5,11 @@ from random import randint
 #Create a subclass of Sprite called VampireSprite
 class VampireSprite(sprite.Sprite):
   #Define the VampireSprite setup method
-  def __init__(self, SPRITE, all_vampires, name = 'none'):
+  def __init__(self, SPRITE, SPEED, all_vampires):
     #Take all the behavior rules fromthe Sprite class and use them for VampireSprite
     super().__init__()
-    self.name = name
     #Set the default movement speed
-    self.speed = 2.0
+    self.speed = SPEED
     #Randomly select a lane between 0 and 4
     self.lane = randint(0,4)
     #Add all vampire pizza sprites to a group called all_vampires
