@@ -6,6 +6,7 @@ from pygame import *
 from random import randint
 from VampireSprite import *
 from BackgroundTile import *
+from Counters import *
 
 #Initialize pygame
 pygame.init()
@@ -20,6 +21,11 @@ WINDOW_RES = (WINDOW_WIDTH, WINDOW_HEIGHT)
 #Define rates
 SPAWN_RATE = 360
 FRAME_RATE = 60
+
+#Pizza bucks
+STARTING_BUCKS = 15
+BUCK_RATE = 120 #number of loops to earn a buck
+STARTING_BUCK_BOOSTER = 1
 
 #Define speeds
 REG_SPEED = 2
@@ -50,6 +56,8 @@ VAMPIRE_PIZZA = transform.scale(pizza_surf, (WIDTH,HEIGHT))
 #Create a group for all the VampireSprite instances
 all_vampires = sprite.Group()
 
+#Create inital instances
+counters = Counters(STARTING_BUCKS, BUCK_RATE, STARTING_BUCK_BOOSTER)
 
 
 
@@ -149,6 +157,7 @@ while game_running:
     vampire.update(GAME_WINDOW, BACKGROUND)
   #Update display
   display.update()
+  counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES)
 
   clock.tick(FRAME_RATE)
 
