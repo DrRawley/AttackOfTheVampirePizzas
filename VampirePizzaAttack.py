@@ -5,6 +5,7 @@ import pygame
 from pygame import *
 from random import randint
 from VampireSprite import *
+from BackgroundTile import *
 
 #Initialize pygame
 pygame.init()
@@ -47,13 +48,30 @@ all_vampires = sprite.Group()
 
 
 
+
 #-----------------------------------------------------------------
-#Initialize and draw bg grid
+#Initialize and draw the background grid
+
+#Create an empty list
+tile_grid = []
 tile_color = WHITE
 for row in range(6):
-  for col in range(11):
-    draw.rect(GAME_WINDOW, tile_color, (col*WIDTH,row*HEIGHT,WIDTH,HEIGHT), 1)
-  
+  #Create an empty list each time the loop runs
+  row_of_tiles = []
+  #Add each of the six lists called row_of_tiles to the tile_grid list above
+  tile_grid.append(row_of_tiles)
+  for column in range(11):
+    #Create an invisible rect for each background tile sprite
+    tile_rect = Rect(column*WIDTH, row*HEIGHT, WIDTH, HEIGHT)
+    #For each new column in each row create a new background tile sprite
+    new_tile = BackgroundTile(tile_rect)
+    #Add each new background tile sprite to the correct row_of_tiles list
+    row_of_tiles.append(new_tile)
+#Initialize and draw VISIBLE grid TO the background surface
+for row in range(6):
+  for column in range(11):
+    draw.rect(BACKGROUND, tile_color, (column*WIDTH, row*HEIGHT, WIDTH, HEIGHT), 1)
+GAME_WINDOW.blit(BACKGROUND,(0,0))
 
 
 #-----------------------------------------------------------------
@@ -61,10 +79,6 @@ for row in range(6):
 game_running = True
 #Game Loop
 while game_running:
-  # GAME_WINDOW.blit(BACKGROUND,(0,0))
-  for row in range(6):
-    for col in range(11):
-      draw.rect(GAME_WINDOW, tile_color, (col*WIDTH,row*HEIGHT,WIDTH,HEIGHT), 1)
   #Check for events
   for event in pygame.event.get():
 
