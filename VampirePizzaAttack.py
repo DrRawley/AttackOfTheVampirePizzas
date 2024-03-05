@@ -16,6 +16,12 @@ WINDOW_RES = (WINDOW_WIDTH, WINDOW_HEIGHT)
 GAME_WINDOW = display.set_mode(WINDOW_RES) #tuple data type
 display.set_caption('Attack of the Vampire Pizzas!')
 
+#add background image
+background_img = image.load('gameassets/restaurant.jpg')
+background_surf = Surface.convert_alpha(background_img)
+BACKGROUND = transform.scale(background_surf, WINDOW_RES)
+GAME_WINDOW.blit(BACKGROUND,(0,0))
+
 #Setup enemy image
 pizza_img = image.load('gameassets/vampire.png')
 pizza_surf = Surface.convert_alpha(pizza_img)
