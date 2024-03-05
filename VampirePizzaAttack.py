@@ -7,6 +7,7 @@ from random import randint
 from VampireSprite import *
 from BackgroundTile import *
 from Counters import *
+from Trap import *
 
 #Initialize pygame
 pygame.init()
@@ -53,13 +54,27 @@ pizza_img = image.load('gameassets/vampire.png')
 pizza_surf = Surface.convert_alpha(pizza_img)
 VAMPIRE_PIZZA = transform.scale(pizza_surf, (WIDTH,HEIGHT))
 
+#Set up trap images
+garlic_img = image.load('gameassets/garlic.png')
+garlic_surf = Surface.convert_alpha(garlic_img)
+GARLIC = transform.scale(garlic_surf, (WIDTH, HEIGHT))
+cutter_img = image.load('gameassets/pizzacutter.png')
+cutter_surf = Surface.convert_alpha(cutter_img)
+CUTTER = transform.scale(cutter_surf, (WIDTH, HEIGHT))
+pepperoni_img = image.load('gameassets/pepperoni.png')
+pepperoni_surf = Surface.convert_alpha(pepperoni_img)
+PEPPERONI = transform.scale(pepperoni_surf, (WIDTH, HEIGHT))
+
+
 #Create a group for all the VampireSprite instances
 all_vampires = sprite.Group()
 
 #Create inital instances
 counters = Counters(STARTING_BUCKS, BUCK_RATE, STARTING_BUCK_BOOSTER)
-
-
+SLOW = Trap('SLOW', 5, GARLIC)
+DAMAGE = Trap('DAMAGE', 3, CUTTER)
+EARN = Trap('EARN', 7, PEPPERONI)
+trap_applicator = TrapApplicator()
 
 #-----------------------------------------------------------------
 #Initialize and draw the background grid
@@ -107,7 +122,8 @@ while game_running:
       #change the value of effect to True
       tile_y = y // 100
       tile_x = x // 100
-      tile_grid[tile_y][tile_x].effect = True
+      #tile_grid[tile_y][tile_x].effect = True
+      trap_applicator.select_tile(tile_grid[tile_y][tile_x], counters)
       # print('You clicked me! x: ' + str(x) + '  y: ' + str(y))
       # print('This corresponds to tile: row: ' + str(tile_y) + '  col: ' + str(tile_x))
       # sys.stdout.flush() #write debug stuff to console right away
@@ -152,12 +168,13 @@ while game_running:
       vampire.kill()
     
 
-  #Update sprites
+  #Update vampire sprites
   for vampire in all_vampires:
     vampire.update(GAME_WINDOW, BACKGROUND)
+  #Update pizza bucks counter
+  counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES)
   #Update display
   display.update()
-  counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES)
 
   clock.tick(FRAME_RATE)
 
