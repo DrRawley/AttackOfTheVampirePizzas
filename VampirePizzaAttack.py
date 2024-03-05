@@ -5,7 +5,7 @@ import pygame
 from pygame import *
 from random import randint
 from VampireSprite import *
-from BackgroundTile import *
+from Tiles import *
 from Counters import *
 from Trap import *
 
