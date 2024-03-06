@@ -36,6 +36,10 @@ SLOW_SPEED = 1
 WIDTH = 100
 HEIGHT = 100
 
+#Set up win/lose conditions
+MAX_BAD_REVIEWS = 3
+WIN_TIME = FRAME_RATE * 60 * 3
+
 #Define colors
 WHITE = (255,255,255)
 
@@ -70,7 +74,7 @@ PEPPERONI = transform.scale(pepperoni_surf, (WIDTH, HEIGHT))
 all_vampires = sprite.Group()
 
 #Create inital instances
-counters = Counters(STARTING_BUCKS, BUCK_RATE, STARTING_BUCK_BOOSTER)
+counters = Counters(STARTING_BUCKS, BUCK_RATE, STARTING_BUCK_BOOSTER, WIN_TIME)
 SLOW = Trap('SLOW', 5, GARLIC)
 DAMAGE = Trap('DAMAGE', 3, CUTTER)
 EARN = Trap('EARN', 7, PEPPERONI)
@@ -122,6 +126,7 @@ GAME_WINDOW.blit(BACKGROUND,(0,0))
 #-----------------------------------------------------------------
 #Start Main Game Loop
 game_running = True
+program_running = True
 #Game Loop
 while game_running:
   #Check for events
@@ -130,6 +135,7 @@ while game_running:
     #Exit loop on quit
     if event.type == QUIT:
       game_running = False
+      program_running = False
     #Listen for the mouse button to be clicked
     elif event.type == MOUSEBUTTONDOWN:
       #Get the x,y coordinates where the mouse was clicked on the screen
@@ -192,6 +198,11 @@ while game_running:
         vampire.attack(right_tile)
 
     
+  #Set win/lose condition
+  if counters.bad_reviews >= MAX_BAD_REVIEWS:
+    game_running = False
+  if counters.loop_count > WIN_TIME:
+    game_running = False
 
   #Update vampire sprites
   for vampire in all_vampires:
@@ -203,7 +214,7 @@ while game_running:
       tile.draw_trap(GAME_WINDOW, trap_applicator, WIDTH, HEIGHT)
   
   #Update pizza bucks counter
-  counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES)
+  counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES, WIN_TIME, FRAME_RATE)
   #Update display
   display.update()
 
@@ -211,5 +222,25 @@ while game_running:
 
 #End Main Game Loop
 #-----------------------------------------------------------------
+end_font = font.Font('gameassets/pizza_font.ttf', 50)
+#Test if win/lose condition has been met
+if program_running:
+  if counters.bad_reviews >= MAX_BAD_REVIEWS:
+    end_surf = end_font.render('Game Over', True, WHITE)
+  else:
+    end_surf = end_font.render('You Win!', True, WHITE)
+  GAME_WINDOW.blit(end_surf, (350,200))
+  display.update()
+#Start end of game loop
+while program_running:
+  for event in pygame.event.get():
+    #Listen for the quit event
+    if event.type == QUIT:
+      program_running = False
+  #Set the frame rate
+    clock.tick(FRAME_RATE)
+#Close end of game loop
+
+
 #Clean up game
 pygame.quit()

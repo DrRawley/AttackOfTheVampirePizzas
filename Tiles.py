@@ -27,7 +27,8 @@ class PlayTile(BackgroundTile):
     if bool(trap) and not bool(self.trap):
       counters.pizza_bucks -= trap.cost
       self.trap = trap
-      if trap == 'EARN':
+      from VampirePizzaAttack import EARN
+      if trap == EARN:
         counters.buck_booster += 1
     return None
   #Draw the trap image to the selected play tile

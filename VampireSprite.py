@@ -34,6 +34,8 @@ class VampireSprite(sprite.Sprite):
     #Check to see if dead, or off playing field, if not update sprite image to new location
     if self.health <= 0 or self.rect.x <= 100:
       self.kill()
+      if self.rect.x <= 100:
+        counters.bad_reviews += 1
     else:
       game_window.blit(self.image, (self.rect.x, self.rect.y))
 
