@@ -1,7 +1,6 @@
 import pygame
 from pygame import *
 from Counters import *
-#from Tiles import BackgroundTile
 
 #Set up Trap class
 class Trap(object):

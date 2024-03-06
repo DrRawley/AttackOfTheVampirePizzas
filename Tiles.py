@@ -11,6 +11,11 @@ class BackgroundTile(sprite.Sprite):
     from Trap import Trap
     self.trap: Trap = None
     self.rect = rect
+  #If I do the type defs here I still get circular import erros
+  def set_trap(self, trap, counters: Counters):
+    raise NotImplementedError("Subclass must implement this method")
+  def draw_trap(self, game_window, trap_applicator, WIDTH, HEIGHT):
+    raise NotImplementedError("Subclass must implement this method")
 
 #A subclass of BackgroundTile where the player can set traps
 class PlayTile(BackgroundTile):
@@ -27,7 +32,7 @@ class PlayTile(BackgroundTile):
     return None
   #Draw the trap image to the selected play tile
   from Trap import TrapApplicator #defered import --avoid circular import
-  def draw_trap(self, game_window, trap_applicator: TrapApplicator):
+  def draw_trap(self, game_window, trap_applicator: TrapApplicator, WIDTH, HEIGHT):
     if bool(self.trap):
       game_window.blit(self.trap.trap_img, (self.rect.x, self.rect.y))
 
@@ -55,6 +60,6 @@ class InactiveTile(BackgroundTile):
   def set_trap(self, trap: Trap, counters: Counters):
     return None
   from Trap import TrapApplicator
-  def draw_trap(self, game_window, trap_applicator: TrapApplicator):
+  def draw_trap(self, game_window, trap_applicator: TrapApplicator, WIDTH, HEIGHT):
     pass
 

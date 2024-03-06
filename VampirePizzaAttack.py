@@ -90,8 +90,7 @@ for row in range(6):
   for column in range(11):
     #Create an invisible rect for each background tile sprite
     tile_rect = Rect(column*WIDTH, row*HEIGHT, WIDTH, HEIGHT)
-    #For each new column in each row create a new background tile sprite
-    #new_tile = BackgroundTile(tile_rect)
+    #For each new column in each row create an appropriate tile
     if column <= 1:
       new_tile = InactiveTile(tile_rect)
     else:
@@ -151,6 +150,14 @@ while game_running:
   if randint(1, SPAWN_RATE) == 1:
     VampireSprite(VAMPIRE_PIZZA, REG_SPEED, all_vampires)
 
+  #Draw traps
+  for tile_row in tile_grid:
+    tile: BackgroundTile
+    for tile in tile_row:
+      if bool(tile.trap):
+        GAME_WINDOW.blit(BACKGROUND, (tile.rect.x, tile.rect.y), tile.rect)
+
+
   #Set up collision detection
   #Run through each vamp pizza sprite in the list
   for vampire in all_vampires:
@@ -189,7 +196,13 @@ while game_running:
 
   #Update vampire sprites
   for vampire in all_vampires:
-    vampire.update(GAME_WINDOW, BACKGROUND)
+    vampire.update(GAME_WINDOW, BACKGROUND, counters)
+  
+  for tile_row in tile_grid:
+    tile: BackgroundTile
+    for tile in tile_row:
+      tile.draw_trap(GAME_WINDOW, trap_applicator, WIDTH, HEIGHT)
+  
   #Update pizza bucks counter
   counters.update(GAME_WINDOW,BACKGROUND,WHITE,WINDOW_RES)
   #Update display

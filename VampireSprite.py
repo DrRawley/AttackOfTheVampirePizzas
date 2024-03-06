@@ -21,7 +21,8 @@ class VampireSprite(sprite.Sprite):
     #Create a rect for each sprite and place it just off the right side of the screen in the correct lane
     self.rect = self.image.get_rect(center = (1100,y))
   #Draw the sprite
-  def update(self, game_window, BACKGROUND):
+  from Counters import Counters
+  def update(self, game_window, BACKGROUND, counters: Counters):
     #Erase the last sprite image
     game_window.blit(BACKGROUND, (self.rect.x, self.rect.y), self.rect)
     #Move the sprite
