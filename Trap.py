@@ -20,3 +20,5 @@ class TrapApplicator(object):
   from Tiles import BackgroundTile #defered import --avoid circular import
   def select_tile(self, tile: BackgroundTile, counters: Counters):
     self.selected = tile.set_trap(self.selected, counters)
+
+    

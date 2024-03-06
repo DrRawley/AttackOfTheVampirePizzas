@@ -160,6 +160,7 @@ while game_running:
 
   #Set up collision detection
   #Run through each vamp pizza sprite in the list
+  vampire: VampireSprite
   for vampire in all_vampires:
     #Store the row where the vampire sprite is located
     tile_row = tile_grid[vampire.rect.y // 100]
@@ -181,17 +182,15 @@ while game_running:
     #Now test if the left side of the vampire pizza is touching a tile and
     #if that tile has been clicked.
     #if true, set the vampire speed to 1
-    if bool(left_tile) and left_tile.effect:
-      vampire.speed = SLOW_SPEED
+    if bool(left_tile):
+      vampire.attack(left_tile)
     #Test if the right side is touching a tile and if that one has been clicked
-    if bool(right_tile) and right_tile.effect:
+    if bool(right_tile):
       #Make sure both sides are touching a different tile
       if right_tile != left_tile:
         #if both are true, change vampire speed to 1
-        vampire.speed = SLOW_SPEED
-    #Delete the sprite if it leaves the screen
-    if vampire.rect.x <= 0:
-      vampire.kill()
+        vampire.attack(right_tile)
+
     
 
   #Update vampire sprites
