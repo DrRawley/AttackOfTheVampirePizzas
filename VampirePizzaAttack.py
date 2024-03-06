@@ -91,13 +91,32 @@ for row in range(6):
     #Create an invisible rect for each background tile sprite
     tile_rect = Rect(column*WIDTH, row*HEIGHT, WIDTH, HEIGHT)
     #For each new column in each row create a new background tile sprite
-    new_tile = BackgroundTile(tile_rect)
-    #Add each new background tile sprite to the correct row_of_tiles list
+    #new_tile = BackgroundTile(tile_rect)
+    if column <= 1:
+      new_tile = InactiveTile(tile_rect)
+    else:
+      if row == 5:
+        if 2 <= column <= 4:
+          new_tile = ButtonTile(tile_rect)
+          new_tile.trap = [SLOW, DAMAGE, EARN][column - 2]
+        else:
+          new_tile = InactiveTile(tile_rect)
+      else:
+        new_tile = PlayTile(tile_rect)
+  
     row_of_tiles.append(new_tile)
+    #Draw trap icons in row 5, cols 2, 3, and 4 
+    if row == 5 and 2 <= column <= 4:
+      BACKGROUND.blit(new_tile.trap.trap_img, (new_tile.rect.x, new_tile.rect.y))
+    #Draw grid in play area
+    if column != 0 and row != 5:
+      if column != 1:
+        draw.rect(BACKGROUND, tile_color, (WIDTH*column,HEIGHT*row,WIDTH,HEIGHT),1)
+
 #Initialize and draw VISIBLE grid TO the background surface
-for row in range(6):
-  for column in range(11):
-    draw.rect(BACKGROUND, tile_color, (column*WIDTH, row*HEIGHT, WIDTH, HEIGHT), 1)
+# for row in range(6):
+#   for column in range(11):
+    # draw.rect(BACKGROUND, tile_color, (column*WIDTH, row*HEIGHT, WIDTH, HEIGHT), 1)
 GAME_WINDOW.blit(BACKGROUND,(0,0))
 
 
