@@ -1,7 +1,7 @@
 import pygame
 from pygame import *
 from Counters import *
-from Tiles import *
+#from Tiles import BackgroundTile
 
 #Set up Trap class
 class Trap(object):
@@ -18,5 +18,6 @@ class TrapApplicator(object):
   def select_trap(self, trap: Trap, counters: Counters):
     if trap.cost <= counters.pizza_bucks:
       self.selected = trap
+  from Tiles import BackgroundTile #defered import --avoid circular import
   def select_tile(self, tile: BackgroundTile, counters: Counters):
     self.selected = tile.set_trap(self.selected, counters)
